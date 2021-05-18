@@ -1,0 +1,90 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiment</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .sidebar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: seagreen;
+      width: 300px;
+      height: 100vh;
+
+      display: flex;
+      flex-direction: column;;
+      padding: 10px;
+    }
+
+    .form-field {
+      margin: 10px 0px;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <div id="main">
+    <h1 style="color: green;">You are new text now</h1>
+    <p style="color: black;">You are new paragrarph now</p>
+  </div>
+  <div class="sidebar">
+    <div class="form-field">
+      <label for="text">Text</label>
+      <input type="text" id="innerTextInputElem" value="">
+    </div>
+
+    <div class="form-field">
+      <label for="color">Color</label>
+      <input type="text" id="colorValueInputElem" value="">
+    </div>
+  </div>
+
+  <script>
+    const writeToFile = () => {
+      fetch('http://localhost:3000', {
+        method: 'POST',
+        body: document.documentElement.innerHTML,
+      });
+    };
+
+    const mainElem = document.getElementById('main');
+    const innerTextInputElem = document.getElementById('innerTextInputElem');
+    const colorValueInputElem = document.getElementById('colorValueInputElem');
+
+    let handleInnerTextChange = () => {};
+    let handleColorChange = () => {};
+
+    mainElem.addEventListener('click', (e) => {
+      cleanAllInputListensers();
+
+      const elem = e.target;
+      
+      handleInnerTextChange = (e) => {
+        elem.innerText = e.target.value;
+        writeToFile();
+      };
+      handleColorChange = (e) => {
+        elem.style.color = e.target.value;
+        writeToFile();
+      };
+      
+      innerTextInputElem.value = elem.innerText;
+      colorValueInputElem.value = elem.style.color;
+
+      innerTextInputElem.addEventListener('input', handleInnerTextChange);
+      colorValueInputElem.addEventListener('input', handleColorChange);
+    });
+
+    function cleanAllInputListensers() {
+      innerTextInputElem.removeEventListener('input', handleInnerTextChange);
+      colorValueInputElem.removeEventListener('input', handleColorChange);
+    }
+  </script>
+
+
+</body>
